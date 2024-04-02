@@ -1,0 +1,7 @@
+service discovery system include:
+    - service registration: a service must register itself to some common place
+    so that others can discover it.
+    - health check: an instance must report its health status to the common place
+    so that others can still talk to and discover it
+    - service discovery: a service initiates the service discovery process by initializing client with
+    specified target service name to find.
