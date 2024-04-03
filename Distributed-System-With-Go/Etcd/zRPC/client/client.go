@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"hello/model"
+	"hello/session_client"
 	"log"
 
 	"github.com/zeromicro/go-zero/core/discov"
@@ -10,16 +11,30 @@ import (
 )
 
 func main() {
-	client := zrpc.MustNewClient(zrpc.RpcClientConf{
+
+	sess := session_client.NewSession(zrpc.RpcClientConf{
 		Etcd: discov.EtcdConf{
 			Hosts: []string{"localhost:2379"},
 			Key:   "hello.rpc",
-		},
-	})
+		}})
+	// client := zrpc.MustNewClient(zrpc.RpcClientConf{
+	// 	Etcd: discov.EtcdConf{
+	// 		Hosts: []string{"localhost:2379"},
+	// 		Key:   "hello.rpc",
+	// 	},
+	// })
 
-	conn := client.Conn()
-	hello := model.NewGreeterClient(conn)
-	reply, err := hello.SayHello(context.Background(), &model.HelloRequest{Name: "go-zero"})
+	// conn := client.Conn()
+	// hello := model.NewGreeterClient(conn)
+	service, err := sess.GetSessionClient("123", zrpc.RpcClientConf{
+		Etcd: discov.EtcdConf{
+			Hosts: []string{"localhost:2379"},
+			Key:   "hello.rpc",
+		}})
+	if err != nil {
+		log.Fatal(err)
+	}
+	reply, err := service.SayHello(context.Background(), &model.HelloRequest{Name: "go-zero"})
 	if err != nil {
 		log.Fatal(err)
 	}
