@@ -1,0 +1,10 @@
+{
+    "Name":"hello.rpc",
+    "ListenOn": "localhost:8071",
+    "Etcd": {
+        "Hosts": [
+            "localhost:2379"
+        ],
+        "Key": "hello.rpc"
+    }
+}

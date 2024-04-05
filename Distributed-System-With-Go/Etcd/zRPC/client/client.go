@@ -26,7 +26,7 @@ func main() {
 
 	// conn := client.Conn()
 	// hello := model.NewGreeterClient(conn)
-	service, err := sess.GetSessionClient("123", zrpc.RpcClientConf{
+	service, err := sess.GetSessionClient("125", zrpc.RpcClientConf{
 		Etcd: discov.EtcdConf{
 			Hosts: []string{"localhost:2379"},
 			Key:   "hello.rpc",
