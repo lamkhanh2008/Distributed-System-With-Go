@@ -7,19 +7,18 @@ import (
 	"runtime/debug"
 
 	"github.com/siddontang/go-mysql/canal"
-	"github.com/siddontang/go-mysql/mysql"
 )
 
 func BinlogListener(db *sql.DB) {
 	c, err := getDefaultCanal()
 
 	if err == nil {
-		_, err := c.GetMasterPos()
+		coords, err := c.GetMasterPos()
 		if err == nil {
 			c.SetEventHandler(&binlogHandler{BinlogParser: BinlogParser{dbSource: db}})
-			c.RunFrom(mysql.Position{Name: "mysql-bin.000014", Pos: 179812055})
+			// c.RunFrom(mysql.Position{Name: "mysql-bin.000014", Pos: 179812055})
 
-			// c.RunFrom(coords)
+			c.RunFrom(coords)
 		}
 	}
 }
@@ -65,23 +64,23 @@ func (h *binlogHandler) OnRow(e *canal.RowsEvent) error {
 			h.GetBinLogData(&user, e, i)
 			switch e.Action {
 			case canal.UpdateAction:
-				olduser := User{}
+				// olduser := User{}
 				// tx, err := h.dbSource.Begin()
 
 				// Example query
-				update, err := h.dbSource.Prepare("UPDATE User_test SET name = ? WHERE Id = ?")
-				if err != nil {
-					// Rollback the transaction if an error occurs
-					log.Fatal(err)
-				}
-				_, err = update.Exec(user.Name, user.Id)
-				if err != nil {
-					// Rollback the transaction if an error occurs
-					log.Fatal(err)
-				}
-				h.GetBinLogData(&olduser, e, i-1)
+				// update, err := h.dbSource.Prepare("UPDATE User_test SET name = ? WHERE Id = ?")
+				// if err != nil {
+				// 	// Rollback the transaction if an error occurs
+				// 	log.Fatal(err)
+				// }
+				// _, err = update.Exec(user.Name, user.Id)
+				// if err != nil {
+				// 	// Rollback the transaction if an error occurs
+				// 	log.Fatal(err)
+				// }
+				// h.GetBinLogData(&olduser, e, i-1)
 
-				fmt.Printf("User %d name changed from %s to %s \n", user.Id, olduser.Name, olduser.Name)
+				// fmt.Printf("User %d name changed from %s to %s \n", user.Id, olduser.Name, olduser.Name)
 			case canal.InsertAction:
 				insertVote := "INSERT INTO User_test(id, name) VALUES(?,?)"
 				_, err := h.dbSource.Exec(insertVote, user.Id, user.Name)

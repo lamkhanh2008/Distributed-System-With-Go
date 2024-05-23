@@ -43,45 +43,46 @@ func main() {
 	go binlog.BinlogListener(db)
 
 	go func() {
-		fmt.Print("Thank for watching")
+		for {
+			fmt.Print("Thank for watching")
 
-		if err != nil {
-			log.Fatal(err)
-		}
-		// defer db.Close()
+			if err != nil {
+				log.Fatal(err)
+			}
+			// defer db.Close()
 
-		// Begin the transaction
-		tx, err := db.Begin()
-		if err != nil {
-			log.Fatal(err)
-		}
-		// Example query
-		_, err = tx.Exec("INSERT INTO User (name) VALUES (?)", "lamkhanh")
-		if err != nil {
-			// Rollback the transaction if an error occurs
-			tx.Rollback()
-			log.Fatal(err)
-		}
+			// Begin the transaction
+			tx, err := db.Begin()
+			if err != nil {
+				log.Fatal(err)
+			}
+			// Example query
+			_, err = tx.Exec("INSERT INTO User (name) VALUES (?)", "lamkczxczxzhanh")
+			if err != nil {
+				// Rollback the transaction if an error occurs
+				tx.Rollback()
+				log.Fatal(err)
+			}
 
-		// Another query
-		_, err = tx.Exec("UPDATE User SET name = ? WHERE id = 10", "vvxxcvc")
-		if err != nil {
-			// Rollback the transaction if an error occurs
-			tx.Rollback()
-			log.Fatal(err)
+			// Another query
+			// _, err = tx.Exec("UPDATE User SET name = ? WHERE id = ", "vvxxcvc")
+			// if err != nil {
+			// 	// Rollback the transaction if an error occurs
+			// 	tx.Rollback()
+			// 	log.Fatal(err)
+			// }
+			// _, err = tx.Exec("DELETE FROM User WHERE id = (?)", 12)
+			// if err != nil {
+			// 	// Rollback the transaction if an error occurs
+			// 	tx.Rollback()
+			// 	log.Fatal(err)
+			// }
+			// Commit the transaction if all queries succeed
+			err = tx.Commit()
+			if err != nil {
+				log.Fatal(err)
+			}
 		}
-		// _, err = tx.Exec("DELETE FROM User WHERE id = (?)", 12)
-		// if err != nil {
-		// 	// Rollback the transaction if an error occurs
-		// 	tx.Rollback()
-		// 	log.Fatal(err)
-		// }
-		// Commit the transaction if all queries succeed
-		err = tx.Commit()
-		if err != nil {
-			log.Fatal(err)
-		}
-
 		fmt.Println("Transaction committed successfully")
 	}()
 	time.Sleep(5 * time.Minute)
