@@ -1,0 +1,2 @@
+package duck_model
+
