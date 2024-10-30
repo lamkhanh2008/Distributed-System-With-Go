@@ -1,24 +1,15 @@
-syntax = "proto3";
 
+syntax = "proto3";
 option go_package = "raft_grpc/proto";
 
-service Example {
-	rpc AddWord(AddWordRequest) returns (AddWordResponse) {}
-	rpc GetWords(GetWordsRequest) returns (GetWordsResponse) {}
+service RaftService {
+    rpc  GenerateID (GenerateIDRequest) returns (GenerateIDResponse);
 }
 
-message AddWordRequest {
-	string word = 1;
+message GenerateIDRequest {
+    int64 lastID = 1;
 }
 
-message AddWordResponse {
-	uint64 commit_index = 1;
-}
-
-message GetWordsRequest {
-}
-
-message GetWordsResponse {
-	uint64 read_at_index = 1;
-	repeated string best_words = 2;
+message GenerateIDResponse {
+    int64 newID = 1;
 }

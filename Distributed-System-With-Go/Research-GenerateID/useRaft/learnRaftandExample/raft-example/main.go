@@ -160,6 +160,28 @@ func (hs httpServer) getHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
 	}
 }
+func (hs httpServer) getLeader(w http.ResponseWriter, r *http.Request) {
+	leaderAddr := hs.r.Leader()
+	fmt.Println("Leader", leaderAddr)
+	type Response struct {
+		Message string `json:"message"`
+		Status  int    `json:"status"`
+	}
+	response := Response{
+		Message: string(leaderAddr),
+		Status:  200,
+	}
+
+	// Thiết lập Content-Type là application/json
+	w.Header().Set("Content-Type", "application/json")
+
+	// Mã hóa đối tượng thành JSON và gửi phản hồi
+	if err := json.NewEncoder(w).Encode(response); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	// w.WriteHeader(http.StatusOK)
+}
 
 func (hs httpServer) joinHandler(w http.ResponseWriter, r *http.Request) {
 	followerId := r.URL.Query().Get("followerId")
@@ -174,6 +196,7 @@ func (hs httpServer) joinHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
 		return
 	}
+	// if hs.r.State() ==
 
 	err := hs.r.AddVoter(raft.ServerID(followerId), raft.ServerAddress(followerAddr), 0, 0).Error()
 	if err != nil {
@@ -244,5 +267,6 @@ func main() {
 	http.HandleFunc("/set", hs.setHandler)
 	http.HandleFunc("/get", hs.getHandler)
 	http.HandleFunc("/join", hs.joinHandler)
+	http.HandleFunc("/getLeader", hs.getLeader)
 	http.ListenAndServe(":"+cfg.httpPort, nil)
 }
