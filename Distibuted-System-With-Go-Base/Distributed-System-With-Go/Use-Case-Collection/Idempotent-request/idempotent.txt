@@ -1,3 +1,0 @@
-How an API might receive duplicate request?
-- When user send request but the network is overload and timeout, user dont know and retry the same request -> duplicate 
--> need to idempotent.

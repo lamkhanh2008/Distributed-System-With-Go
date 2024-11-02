@@ -1,6 +1,0 @@
-Name: hello.rpc
-ListenOn: 127.0.0.1:8070
-Etcd:
-  Hosts:
-    - localhost:2379
-  Key: hello.rpc
