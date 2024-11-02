@@ -1,2 +1,0 @@
-Ý tưởng là khi khởi tạo 1 hàm hay class có quá nhiều tham số 
--> khi khởi tạo tạo các API khởi tạo, chia thành các phần nhỏ
