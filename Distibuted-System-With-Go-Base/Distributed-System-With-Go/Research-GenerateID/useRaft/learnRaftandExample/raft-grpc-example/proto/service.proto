@@ -1,0 +1,15 @@
+
+syntax = "proto3";
+option go_package = "raft_grpc/proto";
+
+service RaftService {
+    rpc  GenerateID (GenerateIDRequest) returns (GenerateIDResponse);
+}
+
+message GenerateIDRequest {
+    int64 lastID = 1;
+}
+
+message GenerateIDResponse {
+    int64 newID = 1;
+}
