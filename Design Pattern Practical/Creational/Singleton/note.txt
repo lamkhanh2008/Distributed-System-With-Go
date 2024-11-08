@@ -1,0 +1,26 @@
+Motivation: for some components it only makes sense to have one in the system
++ Database repository
++ Objecty fatory 
+-> prevent anyone creating copy instance
+
+practice: Lazy one-time initialization using sync.Once
+Adhere to DIP: depend on interfaces, not concrete types
+Trong đoạn mã của bạn, tham số once là một instance của sync.Once, một cơ chế trong Go đảm bảo rằng một đoạn mã chỉ được thực thi một lần duy nhất, bất kể số lần gọi. sync.Once thường được sử dụng trong các thiết kế singleton để đảm bảo rằng instance của một đối tượng chỉ được khởi tạo một lần.
+
+Cách hoạt động của once
+once được sử dụng trong hàm GetSingletonDatabase(). Cụ thể, nó nằm trong biểu thức once.Do(func() {...}).
+once.Do nhận vào một hàm (anonymous function) và đảm bảo rằng hàm đó chỉ được thực thi một lần duy nhất trong toàn bộ chương trình, bất kể số lần gọi GetSingletonDatabase().
+Tại sao once không cần khởi tạo mà vẫn chạy?
+once là một biến toàn cục: Khi bạn khai báo var once sync.Once, nó được khởi tạo với giá trị mặc định của loại sync.Once.
+Trong Go, các biến được khởi tạo tự động với giá trị mặc định của chúng. Đối với sync.Once, giá trị mặc định là trạng thái chưa thực thi, tức là hàm bên trong Do vẫn có thể được gọi.
+Khi once.Do được gọi lần đầu tiên, nó thực thi hàm được truyền vào và ghi nhận rằng hàm này đã được chạy.
+Ở những lần gọi GetSingletonDatabase() tiếp theo, once.Do nhận thấy hàm bên trong đã được thực thi, vì vậy nó sẽ bỏ qua và không chạy lại đoạn mã bên trong hàm.
+Chi tiết trong hàm GetSingletonDatabase()
+Khi GetSingletonDatabase() được gọi lần đầu tiên:
+
+once.Do phát hiện rằng hàm bên trong chưa được thực thi, vì vậy nó thực thi hàm anonymous trong Do.
+Đoạn mã trong hàm tạo ra một instance của singletonDatabase, đọc dữ liệu từ file capitals.txt, và khởi tạo biến instance với instance này.
+Từ thời điểm này, instance sẽ giữ một tham chiếu tới instance duy nhất của singletonDatabase.
+Khi GetSingletonDatabase() được gọi lần tiếp theo:
+
+once.Do phát hiện rằng hàm bên trong đã được thực thi rồi, vì vậy nó không thực thi lại và chỉ trả về instance đã được khởi tạo từ lần đầu tiên.
