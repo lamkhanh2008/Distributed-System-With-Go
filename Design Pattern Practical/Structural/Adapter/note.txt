@@ -1,0 +1,3 @@
+adaptor là structural design pattern, cho phép tích hợp các incompatible object to collaborate
+- adapter acts á a wrapper between 2 objects. It catches calls for one object and transforms them to format and interface recognizable by the second object.
+chuyển đổi về đối tượng mà cần biết.

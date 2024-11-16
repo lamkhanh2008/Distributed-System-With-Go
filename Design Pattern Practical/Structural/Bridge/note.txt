@@ -1,0 +1,3 @@
+- Bridge: split a large class or a set of closely related classes into 2 separate hierarchies - abstraction and implementation
+
+chia tách large class thành abstraction và implementation can continue to develop independently without affecting each other.
