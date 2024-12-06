@@ -1,0 +1,1 @@
+sync.Map is designed for concurrent use and built-in methods for safe manipulation of data across goroutines.
